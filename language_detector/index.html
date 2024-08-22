@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Detector</title>
+</head>
+<body>
+    <h1>Language Detector</h1>
+    <form id="languageForm">
+        <textarea id="textInput" placeholder="Enter text here..." rows="10" cols="50"></textarea>
+        <br>
+        <button type="submit">Detect Language</button>
+    </form>
+    <h2 id="result"></h2>
+
+    <script>
+        document.getElementById('languageForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const text = document.getElementById('textInput').value;
+
+            try {
+                const response = await fetch('/detect-language', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text }),
+                });
+
+                const data = await response.json();
+                document.getElementById('result').textContent = `Detected Language: ${data.language}`;
+            } catch (error) {
+                document.getElementById('result').textContent = 'Error detecting language';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
